@@ -10,17 +10,26 @@
 var detectNetwork = function(cardNumber) {
   var prefix = cardNumber.slice(0,2); 
   
-  var indicatorRule = function(prefixArr, length){   //will only handle exactly two prefixes right now 
-    return (cardNumber.length === length) && (prefix === prefixArr[0] || prefix === prefixArr[1]);
+  var indicatorRule = function(prefixArr, lengthArr){
+    var hasPrefix = prefixArr.some(function(val) {
+      return val === prefix; 
+    });
+    var hasLength = lengthArr.some(function(val) {
+      return val === cardNumber.length; 
+    });
+    
+    return hasLength && hasPrefix;
   }
   
   var cardRules={
-    'American Express': {prefixArr:['34','37'], length: 15},
-    'Diner\'s Club': {prefixArr:['38','39'], length: 14}
+    'American Express': {prefixArr:['34','37'], lengthArr: [15]},
+    'Diner\'s Club': {prefixArr:['38','39'], lengthArr: [14]},
+    'Visa': {prefixArr:['4'], lengthArr:[13, 16, 19]},
+    'MasterCard': {prefixArr:['51','52','53','54','55'], lengthArr:[16]}
   }
 
   for (card in cardRules){
-    if (indicatorRule(cardRules[card].prefixArr, cardRules[card].length)){
+    if (indicatorRule(cardRules[card].prefixArr, cardRules[card].lengthArr)){
       return card;
     }
   }
@@ -32,4 +41,5 @@ var detectNetwork = function(cardNumber) {
   // Once you've read this, go ahead and try to implement this function, then return to the console.
   
 };
+
 
