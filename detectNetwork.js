@@ -8,10 +8,10 @@
 //   2. The number of digits in the number (called the length)
 
 var detectNetwork = function(cardNumber) {
-  var prefix = cardNumber.slice(0,2); 
   
   var indicatorRule = function(prefixArr, lengthArr){
     var hasPrefix = prefixArr.some(function(val) {
+      let prefix = cardNumber.slice(0,(val.length));
       return val === prefix; 
     });
     var hasLength = lengthArr.some(function(val) {
@@ -25,8 +25,10 @@ var detectNetwork = function(cardNumber) {
     'American Express': {prefixArr:['34','37'], lengthArr: [15]},
     'Diner\'s Club': {prefixArr:['38','39'], lengthArr: [14]},
     'Visa': {prefixArr:['4'], lengthArr:[13, 16, 19]},
-    'MasterCard': {prefixArr:['51','52','53','54','55'], lengthArr:[16]}
-  }
+    'MasterCard': {prefixArr:['51','52','53','54','55'], lengthArr:[16]},
+    'Discover': {prefixArr:['6011','644','645','646','647','648','649','65'], lengthArr:[16,19]},
+    'Maestro':{prefixArr:['5018','5020','5038','6304'], lengthArr:[12,13,14,15,16,17,18,19]}
+    }
 
   for (card in cardRules){
     if (indicatorRule(cardRules[card].prefixArr, cardRules[card].lengthArr)){
