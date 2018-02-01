@@ -9,39 +9,61 @@
 
 var detectNetwork = function(cardNumber) {
   
+ //indicatorRule returns te]]
   var indicatorRule = function(prefixArr, lengthArr){
+    var prefix ='';
     var hasPrefix = prefixArr.some(function(val) {
-      let prefix = cardNumber.slice(0,(val.length));
-      return val === prefix; 
+      if (typeof val === 'number'){
+        val = val.toString();
+      }
+      prefix = cardNumber.slice(0,(val.length));
+     
+      return val == prefix; 
     });
     var hasLength = lengthArr.some(function(val) {
       return val === cardNumber.length; 
     });
     
-    return hasLength && hasPrefix;
+    if(hasLength && hasPrefix){
+      return prefix;
+    }else {return null;};
   }
-  
   var cardRules={
-    'American Express': {prefixArr:['34','37'], lengthArr: [15]},
+    'American Express': {prefixArr:[34,37], lengthArr: [15]},
     'Diner\'s Club': {prefixArr:['38','39'], lengthArr: [14]},
     'Visa': {prefixArr:['4'], lengthArr:[13, 16, 19]},
     'MasterCard': {prefixArr:['51','52','53','54','55'], lengthArr:[16]},
     'Discover': {prefixArr:['6011','644','645','646','647','648','649','65'], lengthArr:[16,19]},
-    'Maestro':{prefixArr:['5018','5020','5038','6304'], lengthArr:[12,13,14,15,16,17,18,19]}
+    'Maestro':{prefixArr:['5018','5020','5038','6304'], lengthArr:[12,13,14,15,16,17,18,19]},
+   'China UnionPay':{prefixArr: range(622126,622925).concat(range(6282,6288).concat(range(624,626))), lengthArr:[16,17,18,19]},
+    'Switch': {prefixArr:[4903,4905,4911,4936,564182,633110,6333,6759], lengthArr:[16,18,19]}
     }
-
-  for (card in cardRules){
-    if (indicatorRule(cardRules[card].prefixArr, cardRules[card].lengthArr)){
-      return card;
+    
+  var cardMatch = '';
+  var maxPrefix = '';
+  
+  for (card in cardRules){   
+    let validPrefix = indicatorRule(cardRules[card].prefixArr, cardRules[card].lengthArr);
+    if (validPrefix) {console.log("returned "+validPrefix+ " from rule ="+card );}
+    if (validPrefix && (validPrefix.length > maxPrefix.length)){
+      console.log("change from "+maxPrefix+ " to "+validPrefix)
+      maxPrefix = validPrefix;
+      cardMatch = card;
     }
   }
-  return "unrecognized card type";
-  // Note: `cardNumber` will always be a string
-  // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
-  // The American Express network always starts with a 34 or 37 and is 15 digits long
-
-  // Once you've read this, go ahead and try to implement this function, then return to the console.
+  
+  return (cardMatch ? cardMatch : "unrecognized card type");
   
 };
 
+//helper function to deal with ranges
+//assumption that two, non-equal numbers are provided and start<end
+//returns array containing all numbers from start to end
+function range(start, end){
+  var arr = [];
+  for(start;start<=end;start++){
+    arr.push(start);
+  }
+  return arr;
+}
 
