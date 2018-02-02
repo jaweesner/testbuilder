@@ -35,7 +35,7 @@ var detectNetwork = function(cardNumber) {
     'MasterCard': {prefixArr:['51','52','53','54','55'], lengthArr:[16]},
     'Discover': {prefixArr:['6011','644','645','646','647','648','649','65'], lengthArr:[16,19]},
     'Maestro':{prefixArr:['5018','5020','5038','6304'], lengthArr:[12,13,14,15,16,17,18,19]},
-   'China UnionPay':{prefixArr: range(622126,622925).concat(range(6282,6288).concat(range(624,626))), lengthArr:[16,17,18,19]},
+    'China UnionPay':{prefixArr: range(622126,622925).concat(range(6282,6288).concat(range(624,626))), lengthArr:[16,17,18,19]},
     'Switch': {prefixArr:[4903,4905,4911,4936,564182,633110,6333,6759], lengthArr:[16,18,19]}
     }
     
@@ -44,9 +44,8 @@ var detectNetwork = function(cardNumber) {
   
   for (card in cardRules){   
     let validPrefix = indicatorRule(cardRules[card].prefixArr, cardRules[card].lengthArr);
-    if (validPrefix) {console.log("returned "+validPrefix+ " from rule ="+card );}
+    
     if (validPrefix && (validPrefix.length > maxPrefix.length)){
-      console.log("change from "+maxPrefix+ " to "+validPrefix)
       maxPrefix = validPrefix;
       cardMatch = card;
     }
